@@ -17,7 +17,7 @@ require("mongoose").connect(DB)
 
 bot.launch()
   .then(() => console.log('Bot started'))
-  .catch(err => console.error('Error starting bot:', err));
+  .catch((err:any) => console.error('Error starting bot:', err));
 
 app.listen(PORT, () => {
   console.log(`Express server running on http://localhost:${PORT}`);

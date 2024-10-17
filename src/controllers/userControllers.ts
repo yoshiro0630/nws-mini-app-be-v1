@@ -192,7 +192,7 @@ export const updateCurrentValues = async (req: Request, res: Response) => {
     user.energy.curEnergy = curEnergy;
     user.energy.curEnergyUpdatedAt = Date.now();
     await user.save();
-    console.log("update ENergy")
+    // console.log("update ENergy")
     res.status(200).send(true);
   } catch (err) { res.send(err) }
 };
@@ -203,8 +203,9 @@ export const updateTask = async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ tgId: tgId });
     let tasksInfo = user.tasks;
+    console.log(tasksInfo)
     if (!tasksInfo.includes(taskId)) {
-      tasksInfo.tasks.push(taskId);
+      user.tasks.push(taskId);
       let taskInfo = await Tasks.findOne({ id: taskId });
       if (taskInfo) {
         user.points.total += taskInfo.revenue.point;
