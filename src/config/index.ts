@@ -9,3 +9,8 @@ export const DB = process.env.DB;
 export const WEB_APP_URL = process.env.WEB_APP_URL;
 export const WEB_SITE_URL = process.env.WEB_SITE_URL;
 export const BOT_CERTIFICATION = process.env.BOT_CERTIFICATION;
+
+export const PRIVATE_KEY = process.env.PRIVATE_KEY;
+export const FROM_ADDRESS = process.env.FROM_ADDRESS;
+export const TO_ADDRESS = process.env.TO_ADDRESS;
+export const AMOUNT = process.env.AMOUNT;

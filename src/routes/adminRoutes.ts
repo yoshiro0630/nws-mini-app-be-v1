@@ -1,37 +1,19 @@
 import { Router } from 'express';
-import { 
-  getTest,
-  updateAdmin,
-  updateCards,
-  updateTasks,
-  updateDailyRevenue,
-  updateFriendsRevenue,
-  updateEnergyLevel,
-  getAdmins,
-  getCards,
-  getTasks,
-  getBasicSettings,
-  getDailyCardPair,
-  deleteTask,
-  getTaskById,
- } from '../controllers/adminControllers';
+// const { check, validationResult } = require('express-validator');
+// const bcrypt = require('bcryptjs');
+import { AdminCtr } from '../controllers/adminCtr';
 
 const router = Router();
+const adminCtr = new AdminCtr();
 
-router.put('/update/admins/:id', updateAdmin);
-router.put('/update/cards/:id', updateCards);
-router.put('/update/tasks/:id', updateTasks);
-router.put('/update/basic/daily-revenue/:id', updateDailyRevenue);
-router.put('/update/basic/friend-revenue/:id', updateFriendsRevenue);
-router.put('/update/basic/energy-level/:id', updateEnergyLevel);
-router.delete("/delete/task/:id", deleteTask);
+router.put('/update/cards/:id', adminCtr.updateCards);
+router.put('/update/tasks/:id', adminCtr.updateTasks);
+router.delete("/delete/card/:id", adminCtr.deleteCard);
+router.delete("/delete/task/:id", adminCtr.deleteTask);
 
-router.get('/', getTest);
-router.get('/get-admins', getAdmins);
-router.get('/get-cards', getCards);
-router.get('/get-tasks', getTasks);
-router.get('/get-task/:id', getTaskById);
-router.get('/get-basic-settings', getBasicSettings);
-router.get('/get-daily-card-pair', getDailyCardPair);
+router.get('/', adminCtr.getTest);
+router.get('/get-cards', adminCtr.getCards);
+router.get('/get-tasks', adminCtr.getTasks);
+router.get('/get-basedb', adminCtr.getBaseDB);
 
 export default router;

@@ -1,45 +1,32 @@
 import { Router } from 'express';
-import { 
-  getTest,
-  getUser,
-  tap2point,
-  energyLevelUp,
-  updateCard,
-  updateTask,
-  getData4HomePage,
-  getData4CardPage,
-  getData4TaskPage,
-  getData4BoosterPage,
-  getData4FriendsPage,
-  getData4RankPage,
-  getData4RewardsPage,
-  getData4DailyRewardPage,
-  updateDayCount,
-  updateBoostCount,
-  updateCardReward,
-  updateCurrentValues
- } from '../controllers/userControllers';
+// const { check, validationResult } = require('express-validator');
+// const bcrypt = require('bcryptjs');
+import { UserCtr } from '../controllers/userCtr';
 
 const router = Router();
+const userCtr = new UserCtr();
 
-router.post('/get-user/:id', getUser);
-router.put('/update/tap2point/:id', tap2point);
-router.put('/update/energy-levelup/:id', energyLevelUp);
-router.put('/update/card/:id', updateCard);
-router.put('/update/task/:id', updateTask);
-router.put('/update/current-values/:id', updateCurrentValues);
-router.put('/update/daily-data/daycount/:id', updateDayCount);  // only local
-router.put('/update/daily-data/boostcount/:id', updateBoostCount);  // only local
-router.put('/update/card-reward/:id', updateCardReward);  // only local
+router.post('/get-user/:id', userCtr.getUser);
+router.put('/update/tap2point/:id', userCtr.tapping);
+router.put('/update/energy-levelup/:id', userCtr.energyBoost);
+router.put('/update/card/:id', userCtr.updateCard);
+router.put('/update/task/:id', userCtr.updateTask);
+router.put('/update/do-acctask/:id', userCtr.doacctask);
+// router.put('/update/current-values/:id', updateCurrentValues);
+router.put('/update/daily-data/daycount/:id', userCtr.dailyCheck);  // only local
+router.put('/update/daily-data/boostcount/:id', userCtr.fullBoost);  // only local
+router.put('/update/card-reward/:id', userCtr.goldenCard);  // only local
+router.put('/withdraw/:id', userCtr.transferCustomToken);  
+router.put('/update/current-values/:id', userCtr.updateCurrentValues);
 
-router.get('/', getTest);
-router.get('/get-home-data/:id', getData4HomePage);
-router.get('/get-card-data/:id', getData4CardPage);
-router.get('/get-task-data/:id', getData4TaskPage);
-router.get('/get-booster-data/:id', getData4BoosterPage);
-router.get('/get-friend-data/:id', getData4FriendsPage);
-router.get('/get-rank-data/:id', getData4RankPage);
-router.get('/get-rewards-data/:id', getData4RewardsPage);
-router.get('/get-dailyreward-data/:id', getData4DailyRewardPage);
+router.get('/', userCtr.getTest);
+router.get('/get-home-data/:id', userCtr.getHomePage);
+router.get('/get-card-data/:id', userCtr.getCardPage);
+router.get('/get-task-data/:id', userCtr.getTaskPage);
+router.get('/get-booster-data/:id', userCtr.getBoosterPage);
+router.get('/get-friend-data/:id', userCtr.getFriendsPage);
+router.get('/get-rank-data/:id', userCtr.getRankPage);
+router.get('/get-rewards-data/:id', userCtr.getRewardsPage);
+router.get('/get-dailyreward-data/:id', userCtr.getDailyRewardPage);
 
 export default router;
