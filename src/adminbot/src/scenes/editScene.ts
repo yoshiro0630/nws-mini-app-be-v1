@@ -45,7 +45,7 @@ export class EditScene {
   // Method
   public invokeAPI = async () => {
     try {
-      const res = await Axios.put(`https://8152-95-216-228-74.ngrok-free.app/admin/update/tasks/${this.taskId}`, this.taskInfo);
+      const res = await Axios.put(`https://b702-52-68-113-84.ngrok-free.app/admin/update/tasks/${this.taskId}`, this.taskInfo);
       return true;
     } catch (error) {
       console.error("API call failed:", error);

@@ -47,7 +47,7 @@ export class ViewScene {
   // Method
   public invokeAPI = async () => {
     try {
-      await Axios.delete(`https://8152-95-216-228-74.ngrok-free.app/admin/delete/task/${this.taskId}`);
+      await Axios.delete(`https://b702-52-68-113-84.ngrok-free.app/admin/delete/task/${this.taskId}`);
       return true;
     } catch (error) {
       console.error("API call failed:", error);
@@ -80,7 +80,7 @@ export class ViewScene {
   };
 
   public getTasks = async () => {
-    const res = await Axios.get('https://8152-95-216-228-74.ngrok-free.app/admin/get-tasks');
+    const res = await Axios.get('https://b702-52-68-113-84.ngrok-free.app/admin/get-tasks');
     this.tasks = res.data;
     if (!this.tasks) return false;
     else {

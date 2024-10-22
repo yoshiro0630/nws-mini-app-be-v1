@@ -46,10 +46,10 @@ export class AddScene {
   public invokeAPI = async () => {
     try {
       // let tasks = await Tasks.find({});   // local db => occur error
-      const res = await Axios.get('https://8152-95-216-228-74.ngrok-free.app/admin/get-tasks');
+      const res = await Axios.get('https://b702-52-68-113-84.ngrok-free.app/admin/get-tasks');
       let tasks = res.data;
       console.log(tasks.length);
-      await Axios.put(`https://8152-95-216-228-74.ngrok-free.app/admin/update/tasks/${tasks.length+1}`, this.taskInfo);
+      await Axios.put(`https://b702-52-68-113-84.ngrok-free.app/admin/update/tasks/${tasks.length+1}`, this.taskInfo);
       return true;
     } catch (error) {
       console.error("API call failed:", error);
