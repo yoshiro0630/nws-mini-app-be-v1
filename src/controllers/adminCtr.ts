@@ -48,9 +48,9 @@ export class AdminCtr {
     const index = Number(req.params.id);
     const newData = req.body;
     try {
-      if (isNaN(index) || index < 1) res.status(400).json({ error: "Invalid task ID" });
-      if (!this.BASEDB || !this.BASEDB.tasks) res.status(500).json({ error: "Database not initialized or tasks not found" });
-      if (index > this.BASEDB.tasks.length) res.status(404).json({ error: "Task not found" });
+      if (isNaN(index) || index < 1) {res.status(400).json({ error: "Invalid task ID" });return;}
+      if (!this.BASEDB || !this.BASEDB.tasks) {res.status(500).json({ error: "Database not initialized or tasks not found" }); return;}
+      // if (index > this.BASEDB.tasks.length) {res.status(404).json({ error: "Task not found" });return;}
       this.BASEDB.tasks[index - 1] = { id: index, ...newData };
       await this.BASEDB.save();
       res.status(200).json({ success: "Task updated successfully" });
@@ -60,12 +60,13 @@ export class AdminCtr {
     }
   };
   public deleteTask = async (req: Request, res: Response) => {
-    let index = Number(req.params.id);
+    const taskId = Number(req.params.id);
+    const index = this.BASEDB.tasks.findIndex((item:any) => item.id === taskId);
     try {
-      if (isNaN(index) || index < 1 || index > this.BASEDB.cards.length) {
+      if (isNaN(index) || index < 1 || index > this.BASEDB.tasks.length) {
         res.status(404).json({ error: "Task not found" });
       }
-      this.BASEDB.tasks.splice(index - 1, 1);
+      this.BASEDB.tasks.splice(index, 1);
       await this.BASEDB.save();
       res.status(200).json({ success: "Task Deleted Successfully" });
     } catch (err) {
