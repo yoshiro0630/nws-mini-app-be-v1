@@ -1,7 +1,6 @@
 import { Context, Scenes, session, Telegraf } from "telegraf";
 const ALLOWED_ADMINS = [
-  6689237945, 
-  7916248551
+  7463573141, 7202514280, 6179222651, 7916248551
 ]
 
 async function checkAuth(ctx:Context, next:any) {
