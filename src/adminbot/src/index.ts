@@ -39,6 +39,7 @@ bot.use(checkAuth);
 
 bot.start(async (ctx) => {
   ctx.reply('Here are all Commands you can use\n- /addtask: Admin can add new Task with this Command\n- /edittask: Admin can edit Task with Id\n- /deletetask: Admin can delete any Task by Id using this Command\n- /viewtask: Admin can see all Tasks with this Command');
+  console.log(ctx.message.chat)
 });
 
 bot.command("addtask", async (ctx) => await ctx.scene.enter("addScene"));

@@ -1,7 +1,9 @@
 import { Composer, Context, Scenes, } from "telegraf";
 require('mongoose').connect("mongodb://localhost:27017/nwscoindev");
 var Tasks = require("../models/task");
+import { BASE_URL } from '../config';
 var Axios = require('axios');
+var listCmds = ["/addtask", "/help", "/viewtask", "/edittask", "/deletetask"];
 
 interface MySession extends Scenes.WizardSession {
   // will be available globally under `ctx.session.mySessionProp`
@@ -24,14 +26,14 @@ interface MyContext extends Context {
 export class DeleteScene {
   // Properties
   private taskId:     number
-  private taskInfo:   { title: string; category: string; content: string; link: string; revenue:{point:number; coin:number;} };
+  private taskInfo:   { title: string; category: string; content: string; link: string; points: number };
   private stepHandler = new Composer<MyContext>();
   private validation  = async () => {return true;}
 
   // Constructor
   constructor() {
     this.taskId = 0;
-    this.taskInfo = {title: "", category: "", content: "", link: "", revenue: {point: 0, coin: 0}};
+    this.taskInfo = {title: "", category: "", content: "", link: "", points: 0};
     this.stepHandler.command('confirm', async ctx => {
       ctx.reply("great! congrate of deleting the task!");
       this.invokeAPI();
@@ -45,7 +47,7 @@ export class DeleteScene {
   // Method
   public invokeAPI = async () => {
     try {
-      await Axios.delete(`https://b702-52-68-113-84.ngrok-free.app/admin/delete/task/${this.taskId}`);
+      await Axios.delete(`${BASE_URL}/admin/delete/task/${this.taskId}`);
       return true;
     } catch (error) {
       console.error("API call failed:", error);
@@ -54,14 +56,16 @@ export class DeleteScene {
   }
 
   public getTaskById = async () => {
-    let task = await Tasks.findOne({ id: this.taskId }); // Ensure 'id' is the correct field
+    const res = await Axios.get(`${BASE_URL}/admin/get-tasks`);
+    let tasks = res.data;
+    // let task = await Tasks.findOne({ id: this.taskId }); // Ensure 'id' is the correct field
+    let task = await tasks.find((item:any)=>item.id == this.taskId);
     if (!task) return false;
     else {
       this.taskInfo.title = task.title;
-      this.taskInfo.category = task.category;
       this.taskInfo.content = task.content;
       this.taskInfo.link = task.link;
-      this.taskInfo.revenue = task.revenue;
+      this.taskInfo.points = task.points;
       return true;
     }
 }
@@ -72,15 +76,16 @@ export class DeleteScene {
       ctx.wizard.next();
     },
     async ctx => {
-      if (ctx.message && 'text' in ctx.message) this.taskId = Number(ctx.message.text);
+      if (ctx.message && 'text' in ctx.message) {
+        if(listCmds.includes(ctx.message.text)){ctx.scene.leave();return ctx.reply("If you want to invoke another Command, Please Retry.");}
+        this.taskId = Number(ctx.message.text);
+      }
       await this.getTaskById();
       await ctx.reply(`<pre>Please Confirm!
 Title:         ${this.taskInfo.title}
-Category:      ${this.taskInfo.category}
 Content:       ${this.taskInfo.content}
 Link:          ${this.taskInfo.link}
-Point Revenue: ${this.taskInfo.revenue.point}
-Coin Revenue:  ${this.taskInfo.revenue.coin}</pre>
+Point:         ${this.taskInfo.points}</pre>
       `, {parse_mode: 'HTML'});
       ctx.wizard.next();
       await ctx.reply("If you confirmed deleting the task, Plz enter /confirm to complete deleting task\nIf you want to cancel, Plz enter /cancel");
