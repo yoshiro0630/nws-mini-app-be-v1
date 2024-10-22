@@ -1,6 +1,6 @@
 import { Composer, Context, Scenes, } from "telegraf";
 require('mongoose').connect("mongodb://localhost:27017/nwscoindev");
-var Tasks = require("../models/task");
+import { BASE_URL } from '../config';
 var Axios = require('axios');
 
 interface MySession extends Scenes.WizardSession {
@@ -24,7 +24,7 @@ interface MyContext extends Context {
 export class ViewScene {
   // Properties
   private taskId:     number;
-  private taskInfo:   { title: string; category: string; content: string; link: string; revenue:{point:number; coin:number;} };
+  private taskInfo:   { title: string; category: string; content: string; link: string; points: number };
   private tasks: Object[];
   private stepHandler = new Composer<MyContext>();
   private validation  = async () => {return true;}
@@ -32,7 +32,7 @@ export class ViewScene {
   // Constructor
   constructor() {
     this.taskId = 0;
-    this.taskInfo = {title: "", category: "", content: "", link: "", revenue: {point: 0, coin: 0}};
+    this.taskInfo = {title: "", category: "", content: "", link: "", points: 0};
     this.tasks = [];
     this.stepHandler.command('listTask', async ctx => {
       ctx.reply("great! congrate of deleting the task!");
@@ -72,7 +72,7 @@ export class ViewScene {
       if (title.length > 22) {
           title = title.substring(0, 19) + "...";
       }
-      table += `${String(idx).padEnd(4)}| ${String(task.id).padEnd(4)}| ${title.padEnd(23)}| ${String(task.revenue.point).padEnd(9)}\n`;
+      table += `${String(idx).padEnd(4)}| ${String(task.id).padEnd(4)}| ${title.padEnd(23)}| ${String(task.points).padEnd(9)}\n`;
       idx += 1;
     });
 
@@ -80,7 +80,7 @@ export class ViewScene {
   };
 
   public getTasks = async () => {
-    const res = await Axios.get('https://8152-95-216-228-74.ngrok-free.app/admin/get-tasks');
+    const res = await Axios.get(`${BASE_URL}/admin/get-tasks`);
     this.tasks = res.data;
     if (!this.tasks) return false;
     else {
@@ -93,7 +93,7 @@ export class ViewScene {
       await this.getTasks();
       if(this.tasks){
         let table = this.formatTaskAsTable(this.tasks);
-        await ctx.reply(`<pre>${table}<pre>`,{parse_mode: 'HTML'});
+        await ctx.reply(`<pre>${table}</pre>`,{parse_mode: 'HTML'});
         return ctx.scene.leave();
       } else { 
         return ctx.scene.leave();
