@@ -10,6 +10,7 @@ const Constants = require("../config/constants");
 
 import { Telegraf } from 'telegraf';
 import { BOT_TOKEN, PRIVATE_KEY, FROM_ADDRESS, TO_ADDRESS, AMOUNT } from '../config';
+import { start } from 'repl';
 
 const bot = new Telegraf(BOT_TOKEN);
 
@@ -52,6 +53,7 @@ export class UserCtr {
   public getUser = async (req: Request, res: Response) => {
     const tgId = req.params.id;
     const { userName, firstName, lastName, start_param } = req.body;
+    console.log('startParam-------------->', start_param);
     try {
       const user = await User.findOne({ tgId: tgId });
       if (user) {
@@ -424,7 +426,7 @@ export class UserCtr {
       let result = {
         currentPoint: user.points.current,
         currentCoin: user.coins,
-        isVerified: user.acctasks.nodewave && user.acctasks.tweeter && user.acctasks.instagram
+        isVerified: (user.acctasks.nodewave || user.acctasks.tweeter || user.acctasks.instagram) && user.coins > 0
       }
       res.status(200).send(result);
     }

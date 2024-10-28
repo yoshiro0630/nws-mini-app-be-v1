@@ -7,7 +7,7 @@ bot.start((ctx:Context) => {
   const description = 
   'NWSCoin — Play to to get $NWS and NWSChain rewards.\n' +
   'Get $NWS for every friend you refer and every day you login, and extra rewards on NWSChain.\n' +
-  "$NWS is already listed on MEXC and QuickSwap. 4M NWS Reward pool won't last long!\n";
+  "$NWS is already listed on MEXC and QuickSwap. 200M NWS Reward pool won't last long!\n";
 
   const keyboard = Markup.inlineKeyboard([
     [{text: "🎮 Play", web_app: { url: WEB_APP_URL || "" }}],
